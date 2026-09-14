@@ -1,9 +1,13 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import Button from "./Button.jsx";
+import ConfirmDialog from "./ConfirmDialog.jsx";
 import { logout } from "../../services/auth/auth.service.js";
 
 function Header() {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
+	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
 	const isAuthenticated = Boolean(localStorage.getItem("token"));
 	const isLoginPage = pathname === "/login";
 
@@ -12,6 +16,7 @@ function Header() {
 			await logout();
 		} finally {
 			localStorage.removeItem("token");
+			setShowLogoutDialog(false);
 			navigate("/login");
 		}
 	};
@@ -30,16 +35,25 @@ function Header() {
 								to="/tasks"
 								className="font-semibold text-slate-600 transition hover:text-slate-900"
 							>
-									Tasks
+								Tasks
 							</Link>
-							<button
+							<Button
 								type="button"
-								onClick={handleLogout}
-								className="font-semibold cursor-pointer text-blue-600 transition hover:text-blue-700 hover:underline focus:outline-none focus:ring-2 focus:ring-blue-300"
+								fullWidth={false}
+								variant="danger"
+								onClick={() => setShowLogoutDialog(true)}
+								className="px-0 font-semibold text-blue-600"
 							>
 								Logout
-							</button>
-                           
+							</Button>
+							<ConfirmDialog
+								open={showLogoutDialog}
+                                title="Logout?"
+                                message="Are you sure you want to logout? You will need to login again to access your tasks."
+                                confirmLabel="Logout"
+								onCancel={() => setShowLogoutDialog(false)}
+                                onConfirm={handleLogout}
+                            />
 						</>
 					) : isLoginPage ? (
 						<>
