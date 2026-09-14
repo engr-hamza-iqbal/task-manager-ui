@@ -1,3 +1,5 @@
+import Loader from "./Loader.jsx";
+
 function Button({
   children,
   type = 'button',
@@ -8,7 +10,7 @@ function Button({
     <button
       type={type}
       disabled={disabled || loading}
-      className="w-full rounded-lg bg-blue-600 px-4 py-2 font-medium text-white
+      className="w-full cursor-pointer rounded-lg bg-blue-600 px-4 py-2 font-medium text-white
         transition
         hover:bg-blue-700
         focus:outline-none
@@ -17,7 +19,7 @@ function Button({
         disabled:cursor-not-allowed
         disabled:opacity-50"
     >
-      {loading ? 'Logging in...' : children}
+      {loading ? <Loader label="Please wait..." /> : children}
     </button>
   )
 }
