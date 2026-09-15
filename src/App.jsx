@@ -1,7 +1,7 @@
 import { Navigate, Routes, Route } from "react-router-dom";
 import Header from "./components/shared-components/Header.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
+import Login from "./pages/login/index.jsx";
+import Register from "./pages/register/index.jsx";
 import Tasks from "./pages/Tasks.jsx";
 import "./App.css";
 
