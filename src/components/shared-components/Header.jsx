@@ -2,20 +2,19 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./Button.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
-import { logout } from "../../services/auth/auth.service.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function Header() {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
+	const { isAuthenticated, logoutUser } = useAuth();
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-	const isAuthenticated = Boolean(localStorage.getItem("token"));
 	const isLoginPage = pathname === "/login";
 
 	const handleLogout = async () => {
 		try {
-			await logout();
+			await logoutUser();
 		} finally {
-			localStorage.removeItem("token");
 			setShowLogoutDialog(false);
 			navigate("/login");
 		}
