@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../services/auth/auth.service.js";
-import { useAuth } from "../../context/AuthContext.jsx";
 import Form from './Form.jsx';
 
 function Register() {
-  const { loginUser } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -48,10 +46,9 @@ function Register() {
 
     try {
       setLoading(true);
-      const data = await register(formData);
-      loginUser(data.token);
+      await register(formData);
       setFormData({ name: "", email: "", password: "" });
-      navigate("/tasks", {
+      navigate("/login", {
         state: {
           notification: {
             type: "success",
@@ -70,10 +67,10 @@ function Register() {
   };
 
   return (
-    <main className="flex mt-4 items-center justify-center px-4 py-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md space-y-6 bg-white p-8 rounded-xl shadow-md">
+    <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
         <div>
-          <h2 className="mt-2 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Create an account
           </h2>
         </div>

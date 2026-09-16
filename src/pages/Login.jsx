@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/shared-components/Button.jsx";
+import ErrorMessage from "../components/shared-components/ErrorMessage.jsx";
 import Input from "../components/shared-components/Input.jsx";
+import Notification from "../components/shared-components/Notification.jsx";
 import { login } from "../services/auth/auth.service.js";
 
 function Login() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,6 +16,16 @@ function Login() {
   const [errors, setError] = useState({});
   const [apiError, setApiError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [notification, setNotification] = useState(location.state?.notification || null);
+
+  useEffect(() => {
+    if (!notification) {
+      return undefined;
+    }
+
+    const timeoutId = setTimeout(() => setNotification(null), 4000);
+    return () => clearTimeout(timeoutId);
+  }, [notification]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -43,8 +58,8 @@ function Login() {
       setLoading(true);
       const data = await login(formData);
       localStorage.setItem("token", data.token);
-      console.log("Login successful:", data);
       setFormData({ email: "", password: "" });
+      navigate("/tasks");
     } catch (error) {
       setApiError(
         error.response?.data?.message ||
@@ -56,7 +71,13 @@ function Login() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 px-4">
+    <>
+      <Notification
+        message={notification?.message}
+        type={notification?.type}
+        onClose={() => setNotification(null)}
+      />
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-md">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-gray-900">Login</h1>
@@ -66,11 +87,9 @@ function Login() {
           </p>
         </div>
 
-        {apiError && (
-          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
-            {apiError}
-          </div>
-        )}
+        <div className="mb-4">
+          <ErrorMessage>{apiError}</ErrorMessage>
+        </div>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <Input
@@ -98,7 +117,8 @@ function Login() {
           </Button>
         </form>
       </div>
-    </main>
+      </main>
+    </>
   );
 }
 

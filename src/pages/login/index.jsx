@@ -5,10 +5,8 @@ import Notification from "../../components/shared-components/Notification.jsx";
 import { login } from "../../services/auth/auth.service.js";
 import Form from './Form.jsx';
 import Header from "./Header.jsx";
-import { useAuth } from "../../context/AuthContext.jsx";
 
 function Login() {
-  const { loginUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [formData, setFormData] = useState({
@@ -59,7 +57,7 @@ function Login() {
     try {
       setLoading(true);
       const data = await login(formData);
-      loginUser(data.token);
+      localStorage.setItem("token", data.token);
       setFormData({ email: "", password: "" });
       navigate("/tasks");
     } catch (error) {
@@ -79,7 +77,7 @@ function Login() {
         type={notification?.type}
         onClose={() => setNotification(null)}
       />
-      <main className="flex mt-4 items-center justify-center px-4">
+      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-md">
         <Header />
         <div className="mb-4">

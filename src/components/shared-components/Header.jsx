@@ -2,19 +2,20 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Button from "./Button.jsx";
 import ConfirmDialog from "./ConfirmDialog.jsx";
-import { useAuth } from "../../context/AuthContext.jsx";
+import { logout } from "../../services/auth/auth.service.js";
 
 function Header() {
 	const { pathname } = useLocation();
 	const navigate = useNavigate();
 	const [showLogoutDialog, setShowLogoutDialog] = useState(false);
-	const { isAuthenticated, logoutUser } = useAuth();
+	const isAuthenticated = Boolean(localStorage.getItem("token"));
 	const isLoginPage = pathname === "/login";
 
 	const handleLogout = async () => {
 		try {
-			await logoutUser();
+			await logout();
 		} finally {
+			localStorage.removeItem("token");
 			setShowLogoutDialog(false);
 			navigate("/login");
 		}
@@ -23,13 +24,19 @@ function Header() {
 	return (
 		<header className="border-b border-slate-200 bg-white">
 			<div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-				<Link to="/home" className="text-lg font-bold tracking-tight text-slate-900">
+				<Link to="/login" className="text-lg font-bold tracking-tight text-slate-900">
 					Task Manager
 				</Link>
 
 				<nav aria-label="Main navigation" className="flex items-center gap-4 text-sm">
 					{isAuthenticated ? (
 						<>
+							<Link
+								to="/tasks"
+								className="font-semibold text-slate-600 transition hover:text-slate-900"
+							>
+								Tasks
+							</Link>
 							<Button
 								type="button"
 								fullWidth={false}
