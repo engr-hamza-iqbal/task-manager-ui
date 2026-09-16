@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/shared-components/ErrorMessage.jsx";
 import Notification from "../../components/shared-components/Notification.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 import { login } from "../../services/auth/auth.service.js";
 import Form from './Form.jsx';
 import Header from "./Header.jsx";
@@ -9,6 +10,7 @@ import Header from "./Header.jsx";
 function Login() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { loginUser } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -57,7 +59,7 @@ function Login() {
     try {
       setLoading(true);
       const data = await login(formData);
-      localStorage.setItem("token", data.token);
+      loginUser(data.token);
       setFormData({ email: "", password: "" });
       navigate("/tasks");
     } catch (error) {
