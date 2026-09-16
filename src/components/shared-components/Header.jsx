@@ -26,12 +26,6 @@ function Header() {
 				<nav aria-label="Main navigation" className="flex items-center gap-4 text-sm">
 					{isAuthenticated ? (
 						<>
-							<Link
-								to="/tasks"
-								className="font-semibold text-slate-600 transition hover:text-slate-900"
-							>
-									Tasks
-							</Link>
 							<button
 								type="button"
 								onClick={handleLogout}
