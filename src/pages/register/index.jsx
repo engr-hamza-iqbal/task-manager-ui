@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../services/auth/auth.service.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 import Form from './Form.jsx';
 
 function Register() {
   const navigate = useNavigate();
+  const { loginUser } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -46,16 +48,17 @@ function Register() {
 
     try {
       setLoading(true);
-      await register(formData);
+      const data = await register(formData);
+      sessionStorage.setItem(
+        "registrationNotification",
+        JSON.stringify({
+          type: "success",
+          message: "Account created successfully. Welcome!",
+        }),
+      );
+      loginUser(data.token);
       setFormData({ name: "", email: "", password: "" });
-      navigate("/login", {
-        state: {
-          notification: {
-            type: "success",
-            message: "Account created successfully. You can now log in.",
-          },
-        },
-      });
+      navigate("/tasks");
     } catch (error) {
       setApiError(
         error.response?.data?.message ||

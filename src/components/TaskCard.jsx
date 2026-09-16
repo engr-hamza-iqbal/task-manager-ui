@@ -27,7 +27,7 @@ function TaskCard({ task, onToggle, onShowMore, updating }) {
 				<Button
 					type="button"
 					fullWidth={false}
-					variant="ghost"
+					variant="secondary"
 					onClick={() => onShowMore(task.id)}
 					disabled={updating}
 					className="px-0 font-semibold text-blue-600 hover:bg-transparent hover:text-blue-700 hover:underline"

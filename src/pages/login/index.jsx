@@ -67,6 +67,7 @@ function Login() {
         error.response?.data?.message ||
           "Unable to login. Please try again later.",
       );
+      setFormData({ email: "", password: "" });
     } finally {
       setLoading(false);
     }

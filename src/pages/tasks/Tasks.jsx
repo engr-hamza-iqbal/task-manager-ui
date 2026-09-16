@@ -5,6 +5,7 @@ import Button from "../../components/shared-components/Button.jsx";
 import ErrorMessage from "../../components/shared-components/ErrorMessage.jsx";
 import Input from "../../components/shared-components/Input.jsx";
 import Loader from "../../components/shared-components/Loader.jsx";
+import Modal from "../../components/shared-components/Modal.jsx";
 import Notification from "../../components/shared-components/Notification.jsx";
 import Textarea from "../../components/shared-components/Textarea.jsx";
 import {
@@ -24,9 +25,26 @@ function Tasks() {
   const [saving, setSaving] = useState(false);
   const [updatingId, setUpdatingId] = useState(null);
   const [addModalOpen, setAddModalOpen] = useState(false);
-  const [notification, setNotification] = useState(
-    location.state?.notification || null,
-  );
+  const [notification, setNotification] = useState(() => {
+    if (location.state?.notification) {
+      return location.state.notification;
+    }
+
+    const storedNotification = sessionStorage.getItem("registrationNotification");
+    if (!storedNotification) {
+      return null;
+    }
+
+    try {
+      return JSON.parse(storedNotification);
+    } catch {
+      return null;
+    }
+  });
+
+  useEffect(() => {
+    sessionStorage.removeItem("registrationNotification");
+  }, []);
 
   useEffect(() => {
     const loadTasks = async () => {
@@ -105,44 +123,13 @@ function Tasks() {
         type={notification?.type}
         onClose={() => setNotification(null)}
       />
-      {addModalOpen && (
-        <div
-          className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/50 px-4"
-          role="presentation"
-          onMouseDown={(event) =>
-            event.target === event.currentTarget &&
-            !saving &&
-            setAddModalOpen(false)
-          }
-        >
-          <section
-            className="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="add-task-title"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-sm font-medium text-blue-600">Workspace</p>
-                <h2
-                  id="add-task-title"
-                  className="mt-1 text-xl font-semibold text-slate-900"
-                >
-                  Add a task
-                </h2>
-              </div>
-              <Button
-                type="button"
-                fullWidth={false}
-                variant="ghost"
-                className="px-2 text-xl leading-none"
-                onClick={() => setAddModalOpen(false)}
-                disabled={saving}
-                aria-label="Close add task form"
-              >
-                &times;
-              </Button>
-            </div>
+      <Modal
+        open={addModalOpen}
+        title="Add a task"
+        onClose={() => setAddModalOpen(false)}
+        closeDisabled={saving}
+        labelledBy="add-task-title"
+      >
             <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
               <Input
                 name="title"
@@ -183,13 +170,10 @@ function Tasks() {
                 </Button>
               </div>
             </form>
-          </section>
-        </div>
-      )}
+      </Modal>
       <main className="mx-auto min-h-[calc(100vh-4rem)] max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-medium text-blue-600">Workspace</p>
             <h1 className="mt-1 text-2xl font-bold text-slate-900">
               Your tasks
             </h1>
