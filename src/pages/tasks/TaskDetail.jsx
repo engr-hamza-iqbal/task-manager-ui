@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Button from "../components/shared-components/Button.jsx";
-import ConfirmDialog from "../components/shared-components/ConfirmDialog.jsx";
-import ErrorMessage from "../components/shared-components/ErrorMessage.jsx";
-import Input from "../components/shared-components/Input.jsx";
-import Loader from "../components/shared-components/Loader.jsx";
-import Textarea from "../components/shared-components/Textarea.jsx";
-import { deleteTask, getTask, updateTask } from "../services/tasks/task.service.js";
+import Button from "../../components/shared-components/Button.jsx";
+import ConfirmDialog from "../../components/shared-components/ConfirmDialog.jsx";
+import ErrorMessage from "../../components/shared-components/ErrorMessage.jsx";
+import Input from "../../components/shared-components/Input.jsx";
+import Loader from "../../components/shared-components/Loader.jsx";
+import Textarea from "../../components/shared-components/Textarea.jsx";
+import { deleteTask, getTask, updateTask } from "../../services/tasks/task.service.js";
 
 function TaskDetail() {
     const { taskId } = useParams();

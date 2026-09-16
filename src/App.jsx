@@ -3,8 +3,8 @@ import Header from "./components/shared-components/Header.jsx";
 import Home from "./pages/home/Home.jsx";
 import Login from "./pages/login/index.jsx";
 import Register from "./pages/register/index.jsx";
-import TaskDetail from "./pages/TaskDetail.jsx";
-import Tasks from "./pages/Tasks.jsx";
+import TaskDetail from "./pages/tasks/TaskDetail.jsx";
+import Tasks from "./pages/tasks/Tasks.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
 import "./App.css";
 
