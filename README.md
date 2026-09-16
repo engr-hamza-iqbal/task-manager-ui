@@ -1,16 +1,69 @@
-# React + Vite
+# Task Manager UI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React and Vite frontend for the Task Manager API.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 20+
+- The backend running from `../task-manager`
 
-## React Compiler
+## Setup
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+From this directory:
 
-## Expanding the ESLint configuration
+```powershell
+npm install
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+The development configuration uses Vite on port `5173` and proxies `/api`
+requests to `http://localhost:3000`. To use a direct API URL instead, create
+`.env` in this directory:
+
+```env
+VITE_API_BASE_URL=http://localhost:3000/api
+```
+
+Do not put `VITE_API_BASE_URL` in the parent directory's `.env`; Vite reads the
+frontend environment file from `task-manager-ui`.
+
+## Run
+
+Start the backend first in another terminal:
+
+```powershell
+cd ..\task-manager
+npm run dev
+```
+
+Then start the frontend from this directory:
+
+```powershell
+npm run dev
+```
+
+Open `http://localhost:5173`.
+
+## User flow
+
+1. Register at `/register`.
+2. Log in at `/login`; the JWT is stored in local storage.
+3. Open `/tasks`; authenticated API requests receive the JWT automatically.
+4. Create, edit, complete, and delete tasks.
+5. Confirm logout to clear the token and return to `/login`.
+
+## Validation
+
+```powershell
+npm run lint
+npm run build
+```
+
+## Port and CORS notes
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3000`
+- Backend CORS setting: `task-manager/.env` -> `FRONTEND_URL=http://localhost:5173`
+- Swagger: `http://localhost:3000/api-docs/`
+
+If you change the frontend port, update both Vite's `server.port` and the
+backend `FRONTEND_URL`, then restart both servers.
