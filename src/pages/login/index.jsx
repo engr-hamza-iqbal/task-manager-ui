@@ -77,7 +77,7 @@ function Login() {
         type={notification?.type}
         onClose={() => setNotification(null)}
       />
-      <main className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
+      <main className="flex mt-4 items-center justify-center px-4">
       <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-md">
         <Header />
         <div className="mb-4">
