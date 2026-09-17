@@ -80,8 +80,8 @@ function Login() {
         type={notification?.type}
         onClose={() => setNotification(null)}
       />
-      <main className="flex mt-4 items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-xl bg-white p-8 shadow-md">
+      <main className="flex min-h-[calc(100vh-200px)] items-center justify-center px-4">
+      <div className="w-full max-w-lg rounded-xl bg-white p-8 shadow-lg">
         <Header />
         <div className="mb-4">
           <ErrorMessage>{apiError}</ErrorMessage>
